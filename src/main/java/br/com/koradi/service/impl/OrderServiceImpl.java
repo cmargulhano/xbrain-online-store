@@ -1,4 +1,4 @@
-package br.com.koradi.service;
+package br.com.koradi.service.impl;
 
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.dto.model.OrderDto;
@@ -9,6 +9,8 @@ import br.com.koradi.model.order.OrderProduct;
 import br.com.koradi.model.product.Product;
 import br.com.koradi.repository.OrderProductRepository;
 import br.com.koradi.repository.OrderRepository;
+import br.com.koradi.service.CustomerService;
+import br.com.koradi.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,11 @@ import org.springframework.stereotype.Component;
 import static java.math.BigDecimal.valueOf;
 import static java.time.LocalDateTime.now;
 
-/** @author Cláudio Margulhano */
+/**
+ * Order Service default implementation
+ *
+ * @author Cláudio Margulhano
+ */
 @Component
 public class OrderServiceImpl implements OrderService {
 
@@ -32,7 +38,44 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public OrderDto create(OrderDto orderDto) {
-    // TODO: Check if order and product exists
+    Order order = saveOrder(orderDto);
+    orderDto = modelMapper.map(order, OrderDto.class);
+    send(orderDto);
+    return orderDto;
+  }
+
+  @Override
+  public OrderDto findById(String id) {
+    Order order = orderRepository.findById(id).get();
+    OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+    CustomerDto customer = customerService.findCustomerById(order.getCustomer().getId());
+    customer.setOrders(null);
+    orderDto.setCustomer(customer);
+    orderProductRepository
+        .findAllByOrderId(id)
+        .forEach(
+            orderProduct -> {
+              orderDto.addProduct(modelMapper.map(orderProduct.getProduct(), ProductDto.class));
+            });
+    return orderDto;
+  }
+
+  /**
+   * Sends order to MQTT
+   *
+   * @param orderDto {@link OrderDto}
+   */
+  private void send(OrderDto orderDto) {
+    rabbitMQSender.send(orderDto.getId());
+  }
+
+  /**
+   * Saves order
+   *
+   * @param orderDto {@link OrderDto} order
+   * @return {@link Order}
+   */
+  private Order saveOrder(OrderDto orderDto) {
     Order orderModel = modelMapper.map(orderDto, Order.class);
     orderModel.setCustomer(new Customer(orderDto.getCustomerId()));
     double price =
@@ -53,27 +96,6 @@ public class OrderServiceImpl implements OrderService {
                       .build();
               orderProductRepository.save(orderProduct);
             });
-
-    orderDto = modelMapper.map(order, OrderDto.class);
-
-    rabbitMQSender.send(orderDto.getId());
-
-    return orderDto;
-  }
-
-  @Override
-  public OrderDto findById(String id) {
-    Order order = orderRepository.findById(id).get();
-    OrderDto orderDto = modelMapper.map(order, OrderDto.class);
-    CustomerDto customer = customerService.findCustomerById(order.getCustomer().getId());
-    customer.setOrders(null);
-    orderDto.setCustomer(customer);
-    orderProductRepository
-        .findAllByOrderId(id)
-        .forEach(
-            orderProduct -> {
-              orderDto.addProduct(modelMapper.map(orderProduct.getProduct(), ProductDto.class));
-            });
-    return orderDto;
+    return order;
   }
 }

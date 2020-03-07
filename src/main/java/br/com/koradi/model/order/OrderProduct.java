@@ -7,7 +7,11 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
-/** @author Cláudio Margulhano */
+/**
+ * OrderProduct Entity
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @Builder

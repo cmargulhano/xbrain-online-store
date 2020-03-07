@@ -17,9 +17,14 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-/** @author Cláudio Margulhano */
+/**
+ * Customer DTO
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -30,10 +35,12 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class CustomerDto {
   private String id;
   private String fullName;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+
+  @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy")
   @JsonDeserialize(using = LocalDateDeserializer.class)
   @JsonSerialize(using = LocalDateSerializer.class)
   private LocalDate birthDate;
+
   private GenderType gender;
   private String phoneNumber;
   private String mobileNumber;

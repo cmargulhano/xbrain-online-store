@@ -13,7 +13,11 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/** @author Cláudio Margulhano */
+/**
+ * Product Entity
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @NoArgsConstructor

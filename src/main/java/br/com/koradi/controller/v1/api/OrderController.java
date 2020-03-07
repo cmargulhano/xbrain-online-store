@@ -24,16 +24,22 @@ public class OrderController {
   @Autowired private OrderService orderService;
   @Autowired private OrderMapper orderMapper;
   /**
-   * Handles the incoming POST API for new order
+   * Creates new order
    *
    * @param orderRequest {@link OrderRequest}
    * @return {@link Response}
    */
   @PostMapping
   public Response create(@RequestBody @Valid OrderRequest orderRequest) {
-    return Response.ok().setPayload(orderService.create(orderMapper.to(orderRequest)));
+    return Response.ok().setPayload(orderService.create(orderMapper.of(orderRequest)));
   }
 
+  /**
+   * Gets order
+   *
+   * @param id Order id
+   * @return
+   */
   @GetMapping("{id}")
   public Response getOrder(@PathVariable String id) {
     return Response.ok().setPayload(orderService.findById(id));

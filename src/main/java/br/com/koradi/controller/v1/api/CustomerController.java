@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static br.com.koradi.dto.mapper.CustomerMapper.toCustomerDto;
+import static br.com.koradi.dto.mapper.CustomerMapper.of;
 
 /**
  * Customer controller
@@ -40,7 +40,7 @@ public class CustomerController {
    */
   @PostMapping
   public Response create(@RequestBody @Valid CustomerRequest customerRequest) {
-    return Response.ok().setPayload(customerService.create(toCustomerDto(customerRequest)));
+    return Response.ok().setPayload(customerService.create(of(customerRequest)));
   }
 
   /**
@@ -51,7 +51,7 @@ public class CustomerController {
    */
   @PutMapping
   public Response update(@RequestBody @Valid CustomerRequest customerRequest) {
-    return Response.ok().setPayload(customerService.update(toCustomerDto(customerRequest)));
+    return Response.ok().setPayload(customerService.update(of(customerRequest)));
   }
 
   /**
@@ -68,7 +68,7 @@ public class CustomerController {
   }
 
   /**
-   * Finds customer by id
+   * Finds customer's address by id
    *
    * @param id Id
    * @return {@link Response} address

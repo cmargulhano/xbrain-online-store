@@ -1,12 +1,16 @@
-package br.com.koradi.service;
+package br.com.koradi.service.impl;
 
-import br.com.koradi.dto.model.OrderDto;
-import br.com.koradi.repository.AddressRepository;
+import br.com.koradi.service.OrderService;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Sends order to message queue
+ *
+ * @author Cláudio Margulhano
+ */
 @Service
 public class RabbitMQSender {
 
@@ -20,8 +24,12 @@ public class RabbitMQSender {
   @Value("${br.com.koradi.rabbitmq.routingkey}")
   private String routingkey;
 
+  /**
+   * Sends order
+   *
+   * @param id order id
+   */
   public void send(String id) {
-    OrderDto order = orderService.findById(id);
-    rabbitTemplate.convertAndSend(exchange, routingkey, order);
+    rabbitTemplate.convertAndSend(exchange, routingkey, orderService.findById(id));
   }
 }

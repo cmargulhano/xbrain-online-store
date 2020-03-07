@@ -2,7 +2,11 @@ package br.com.koradi.service;
 
 import br.com.koradi.dto.model.OrderDto;
 
-/** @author Cláudio Margulhano */
+/**
+ * Order Service
+ *
+ * @author Cláudio Margulhano
+ */
 public interface OrderService {
   /**
    * Saves order

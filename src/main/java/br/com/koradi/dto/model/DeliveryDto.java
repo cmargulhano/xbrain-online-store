@@ -2,17 +2,19 @@ package br.com.koradi.dto.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+import java.util.Set;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
- * Address DTO
+ * Delivery DTO
  *
  * @author Cláudio Margulhano
  */
@@ -23,29 +25,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @ToString
 @JsonInclude(value = NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressDto {
-
-  @JsonProperty("id")
+public class DeliveryDto {
   private String id;
-
-  @JsonProperty("cep")
-  private String zipCode;
-
-  @JsonProperty("logradouro")
-  private String complement;
-
-  @JsonProperty("bairro")
-  private String neighborhood;
-
-  @JsonProperty("localidade")
-  private String locality;
-
-  @JsonProperty("uf")
-  private String federalUnit;
-
-  @JsonProperty("unidade")
-  private String unit;
-
-  @JsonProperty("number")
-  private String number;
+  private CustomerDto customer;
+  private BigDecimal price;
+  private Set<ProductDto> products;
 }

@@ -4,7 +4,11 @@ import br.com.koradi.dto.model.CustomerDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-/** @author Cláudio Margulhano */
+/**
+ * Customer Service
+ *
+ * @author Cláudio Margulhano
+ */
 public interface CustomerService {
   /**
    * Saves customer
@@ -31,7 +35,7 @@ public interface CustomerService {
   public CustomerDto update(CustomerDto customerDto);
 
   /**
-   * List customers
+   * Lists customers
    *
    * @param pageable {@link Pageable}
    * @return {@link Page}

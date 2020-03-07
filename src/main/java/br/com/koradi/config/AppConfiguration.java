@@ -1,5 +1,6 @@
 package br.com.koradi.config;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.convention.NamingConventions;
@@ -15,11 +16,16 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static org.modelmapper.Conditions.isNotNull;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 import static org.modelmapper.convention.NamingConventions.JAVABEANS_MUTATOR;
 
-/** @author Cláudio Margulhano */
+/**
+ * Configure Application
+ *
+ * @author Cláudio Margulhano
+ */
 @Configuration
 @EnableSwagger2
 public class AppConfiguration {
@@ -29,6 +35,7 @@ public class AppConfiguration {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper
         .getConfiguration()
+        .setPropertyCondition(isNotNull())
         .setFieldMatchingEnabled(true)
         .setFieldAccessLevel(PRIVATE)
         .setMatchingStrategy(STRICT)
@@ -42,7 +49,6 @@ public class AppConfiguration {
     return new RestTemplate();
   }
 
-  /** Contains operations related to customer management */
   @Bean
   public Docket swaggerVirtualStoreApi() {
     return new Docket(DocumentationType.SWAGGER_2)

@@ -1,9 +1,11 @@
-package br.com.koradi.service;
+package br.com.koradi.service.impl;
 
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.model.customer.Address;
 import br.com.koradi.model.customer.Customer;
 import br.com.koradi.repository.CustomerRepository;
+import br.com.koradi.service.AddressService;
+import br.com.koradi.service.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,11 @@ import static br.com.koradi.exception.ExceptionType.DUPLICATE_ENTITY;
 import static br.com.koradi.exception.ExceptionType.ENTITY_NOT_FOUND;
 import static java.util.Optional.ofNullable;
 
-/** @author Cláudio Margulhano */
+/**
+ * Customer Service default implementation
+ *
+ * @author Cláudio Margulhano
+ */
 @Component
 public class CustomerServiceImpl implements CustomerService {
 

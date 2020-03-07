@@ -10,10 +10,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.REMOVE;
-import static javax.persistence.FetchType.LAZY;
-
-/** @author Cláudio Margulhano */
+/**
+ * Customer Entity
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,6 +38,5 @@ public class Customer implements Serializable {
   private String mobileNumber;
   @OneToOne private Address address;
 
-  @OneToMany(fetch = LAZY, cascade = REMOVE)
-  private Set<Order> orders;
+  @OneToMany private Set<Order> orders;
 }

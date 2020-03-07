@@ -1,9 +1,7 @@
 package br.com.koradi.model.order;
 
 import br.com.koradi.model.customer.Customer;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,10 +14,15 @@ import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
-/** @author Cláudio Margulhano */
+/**
+ * Order Entity
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Accessors(chain = true)
 @Entity
 @Table(name = "orders")
@@ -27,6 +30,7 @@ public class Order implements Serializable {
   @Id
   @GeneratedValue(generator = "UUID")
   @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @NonNull
   private String id;
 
   private BigDecimal price;

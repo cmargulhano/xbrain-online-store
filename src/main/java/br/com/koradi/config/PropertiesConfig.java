@@ -5,12 +5,22 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-/** @author Cláudio Margulhano */
+/**
+ * Load custom properties
+ *
+ * @author Cláudio Margulhano
+ */
 @Component
 @PropertySource("classpath:custom.properties")
 public class PropertiesConfig {
   @Autowired private Environment env;
 
+  /**
+   * Gets config value
+   *
+   * @param configKey key
+   * @return value
+   */
   public String getConfigValue(String configKey) {
     return env.getProperty(configKey);
   }

@@ -6,7 +6,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
+/**
+ * Product Repository
+ *
+ * @author Cláudio Margulhano
+ */
 public interface ProductRepository extends PagingAndSortingRepository<Product, String> {
- 
-    List<Product> findAllByPrice(double price, Pageable pageable);
+  List<Product> findAllByPrice(double price, Pageable pageable);
 }

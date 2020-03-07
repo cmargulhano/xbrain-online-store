@@ -1,19 +1,20 @@
-package br.com.koradi.model.customer;
+package br.com.koradi.model.delivery;
 
+import br.com.koradi.model.customer.Customer;
+import br.com.koradi.model.order.Order;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
- * Address Entity
+ * Delivery Entity
  *
  * @author Cláudio Margulhano
  */
@@ -22,24 +23,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity
-@Table(name = "address")
-public class Address implements Serializable {
+@Table(name = "delivery")
+public class Delivery implements Serializable {
   @Id
   @GeneratedValue(generator = "UUID")
   @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
   private String id;
 
-  private String zipCode;
+  private BigDecimal price;
 
-  private String complement;
+  private LocalDateTime orderDate;
 
-  private String neighborhood;
+  @ManyToOne private Customer customer;
 
-  private String locality;
-
-  private String federalUnit;
-
-  private String unit;
-
-  private String number;
+  @OneToOne private Order order;
 }

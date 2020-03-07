@@ -10,13 +10,19 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-/** @author Cláudio Margulhano */
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+/**
+ * Product DTO
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
 @ToString
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@JsonInclude(value = NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductDto {
   private String id;

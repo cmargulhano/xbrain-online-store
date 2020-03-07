@@ -10,7 +10,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
-/** CORS configuration */
+/**
+ * CORS configuration
+ *
+ * @author Cláudio Margulhano
+ */
 @Component
 public class CORSFilter implements Filter {
 

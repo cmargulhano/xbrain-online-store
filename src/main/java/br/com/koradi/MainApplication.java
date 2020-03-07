@@ -25,6 +25,11 @@ import static java.util.Calendar.MAY;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 
+/**
+ * Application Starter
+ *
+ * @author Cláudio Margulhano
+ */
 @SpringBootApplication
 @EnableRabbit
 public class MainApplication {
@@ -74,7 +79,7 @@ public class MainApplication {
       Address address =
           ofNullable(modelMapper.map(addressService.findByZipCode("12236896"), Address.class))
               .get();
-      address.setNumber("123");
+      address.setNumber("126");
       addressRepository.save(address);
 
       Customer customer =

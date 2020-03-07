@@ -1,6 +1,5 @@
 package br.com.koradi.dto.response;
 
-import br.com.koradi.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -8,12 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-/** @author Cláudio Margulhano */
+import static br.com.koradi.dto.response.Response.Status.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.time.LocalDateTime.now;
+
+/**
+ * Response
+ *
+ * @author Cláudio Margulhano
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {
 
@@ -24,64 +31,61 @@ public class Response<T> {
 
   public static <T> Response<T> badRequest() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.BAD_REQUEST);
+    response.setStatus(BAD_REQUEST);
     return response;
   }
 
   public static <T> Response<T> ok() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.OK);
+    response.setStatus(OK);
     return response;
   }
 
   public static <T> Response<T> unauthorized() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.UNAUTHORIZED);
+    response.setStatus(UNAUTHORIZED);
     return response;
   }
 
   public static <T> Response<T> validationException() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.VALIDATION_EXCEPTION);
+    response.setStatus(VALIDATION_EXCEPTION);
     return response;
   }
 
   public static <T> Response<T> wrongCredentials() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.WRONG_CREDENTIALS);
+    response.setStatus(WRONG_CREDENTIALS);
     return response;
   }
 
   public static <T> Response<T> accessDenied() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.ACCESS_DENIED);
+    response.setStatus(ACCESS_DENIED);
     return response;
   }
 
   public static <T> Response<T> exception() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.EXCEPTION);
+    response.setStatus(EXCEPTION);
     return response;
   }
 
   public static <T> Response<T> notFound() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.NOT_FOUND);
+    response.setStatus(NOT_FOUND);
     return response;
   }
 
   public static <T> Response<T> duplicateEntity() {
     Response<T> response = new Response<>();
-    response.setStatus(Status.DUPLICATE_ENTITY);
+    response.setStatus(DUPLICATE_ENTITY);
     return response;
   }
 
   public void addErrorMsgToResponse(String errorMsg, Exception ex) {
     ResponseError error =
-        new ResponseError()
-            .setDetails(errorMsg)
-            .setMessage(ex.getMessage())
-            .setTimestamp(DateUtils.today());
+        new ResponseError().setDetails(errorMsg).setMessage(ex.getMessage()).setTimestamp(now());
     setErrors(error);
   }
 
@@ -99,7 +103,7 @@ public class Response<T> {
 
   @Getter
   @Accessors(chain = true)
-  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @JsonInclude(NON_NULL)
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class PageMetadata {
     private int size;

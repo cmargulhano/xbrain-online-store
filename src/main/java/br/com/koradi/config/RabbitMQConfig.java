@@ -13,43 +13,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** Configures RabbitMQ */
 @Configuration
 public class RabbitMQConfig {
 
-	@Value("${br.com.koradi.rabbitmq.queue}")
-	String queueName;
+  @Value("${br.com.koradi.rabbitmq.queue}")
+  String queueName;
 
-	@Value("${br.com.koradi.rabbitmq.exchange}")
-	String exchange;
+  @Value("${br.com.koradi.rabbitmq.exchange}")
+  String exchange;
 
-	@Value("${br.com.koradi.rabbitmq.routingkey}")
-	private String routingkey;
+  @Value("${br.com.koradi.rabbitmq.routingkey}")
+  private String routingkey;
 
-	@Bean
-	Queue queue() {
-		return new Queue(queueName, false);
-	}
+  @Bean
+  Queue queue() {
+    return new Queue(queueName, false);
+  }
 
-	@Bean
-	DirectExchange exchange() {
-		return new DirectExchange(exchange);
-	}
+  @Bean
+  DirectExchange exchange() {
+    return new DirectExchange(exchange);
+  }
 
-	@Bean
-	Binding binding(Queue queue, DirectExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(routingkey);
-	}
+  @Bean
+  Binding binding(Queue queue, DirectExchange exchange) {
+    return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+  }
 
-	@Bean
-	public MessageConverter jsonMessageConverter() {
-		return new Jackson2JsonMessageConverter();
-	}
+  @Bean
+  public MessageConverter jsonMessageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
 
-
-	@Bean
-	public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
-		return rabbitTemplate;
-	}
+  @Bean
+  public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+    rabbitTemplate.setMessageConverter(jsonMessageConverter());
+    return rabbitTemplate;
+  }
 }

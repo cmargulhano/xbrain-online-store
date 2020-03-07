@@ -10,11 +10,21 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-/** @author Cláudio Margulhano */
+/**
+ * Customer Mapper
+ *
+ * @author Cláudio Margulhano
+ */
 @Component
 public class CustomerMapper {
 
-  public static CustomerDto toCustomerDto(Customer customer) {
+  /**
+   * Maps {@link Customer} to {@link CustomerDto}
+   *
+   * @param customer {@link Customer}
+   * @return {@link CustomerDto}
+   */
+  public static CustomerDto of(Customer customer) {
     CustomerDto user =
         new CustomerDto()
             .setFullName(customer.getFullName())
@@ -33,7 +43,13 @@ public class CustomerMapper {
     return user;
   }
 
-  public static CustomerDto toCustomerDto(CustomerRequest customer) {
+  /**
+   * Maps {@link CustomerRequest} to {@link CustomerDto}
+   *
+   * @param customer {@link CustomerRequest}
+   * @return {@link CustomerDto}
+   */
+  public static CustomerDto of(CustomerRequest customer) {
     return new CustomerDto()
         .setFullName(customer.getFullName())
         .setEmail(customer.getEmail())
