@@ -6,16 +6,19 @@ Para rodar há duas opções via Maven ou Docker:
 ### Maven
 
 ``` 
+docker-compose up &
+
 mvn clean install 
 
 mvn spring-boot:run
+
 
 ```
 
 ### Docker
 
 ```
-docker-compose up
+docker-compose up &
 
 mvn clean install
 
