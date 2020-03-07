@@ -3,35 +3,24 @@ package br.com.koradi.service;
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.dto.model.OrderDto;
 import br.com.koradi.dto.model.ProductDto;
-import br.com.koradi.model.customer.Address;
 import br.com.koradi.model.customer.Customer;
 import br.com.koradi.model.order.Order;
 import br.com.koradi.model.order.OrderProduct;
 import br.com.koradi.model.product.Product;
-import br.com.koradi.repository.CustomerRepository;
 import br.com.koradi.repository.OrderProductRepository;
 import br.com.koradi.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static br.com.koradi.exception.EnterpriseException.throwException;
-import static br.com.koradi.exception.EntityType.CUSTOMER;
-import static br.com.koradi.exception.ExceptionType.DUPLICATE_ENTITY;
-import static br.com.koradi.exception.ExceptionType.ENTITY_NOT_FOUND;
 import static java.math.BigDecimal.valueOf;
 import static java.time.LocalDateTime.now;
-import static java.util.Optional.ofNullable;
 
 /** @author Cláudio Margulhano */
 @Component
 public class OrderServiceImpl implements OrderService {
+
+  @Autowired private CustomerService customerService;
 
   @Autowired private OrderRepository orderRepository;
 
@@ -39,8 +28,11 @@ public class OrderServiceImpl implements OrderService {
 
   @Autowired private ModelMapper modelMapper;
 
+  @Autowired private RabbitMQSender rabbitMQSender;
+
   @Override
   public OrderDto create(OrderDto orderDto) {
+    // TODO: Check if order and product exists
     Order orderModel = modelMapper.map(orderDto, Order.class);
     orderModel.setCustomer(new Customer(orderDto.getCustomerId()));
     double price =
@@ -62,13 +54,20 @@ public class OrderServiceImpl implements OrderService {
               orderProductRepository.save(orderProduct);
             });
 
-    return modelMapper.map(order, OrderDto.class);
+    orderDto = modelMapper.map(order, OrderDto.class);
+
+    rabbitMQSender.send(orderDto.getId());
+
+    return orderDto;
   }
 
   @Override
   public OrderDto findById(String id) {
     Order order = orderRepository.findById(id).get();
     OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+    CustomerDto customer = customerService.findCustomerById(order.getCustomer().getId());
+    customer.setOrders(null);
+    orderDto.setCustomer(customer);
     orderProductRepository
         .findAllByOrderId(id)
         .forEach(

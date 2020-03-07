@@ -15,7 +15,6 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 /** @author Cláudio Margulhano */
 @Getter
@@ -34,7 +33,8 @@ public class Order implements Serializable {
 
   private LocalDateTime orderDate;
 
-  @ManyToOne private Customer customer;
+  @ManyToOne(fetch = EAGER)
+  private Customer customer;
 
   @OneToMany(fetch = EAGER, cascade = ALL)
   private Set<OrderProduct> orderProducts;

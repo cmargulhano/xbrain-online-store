@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.math.BigDecimal.valueOf;
-
 /** @author Cláudio Margulhano */
 @Getter
 @Setter
@@ -25,7 +23,8 @@ import static java.math.BigDecimal.valueOf;
 public class OrderDto {
   private String id;
   private String customerId;
-  private BigDecimal price = valueOf(0);
+  private CustomerDto customer;
+  private BigDecimal price;
   private Set<ProductDto> products;
 
   public void addProduct(ProductDto productDto) {

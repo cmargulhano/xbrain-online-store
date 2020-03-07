@@ -8,6 +8,7 @@ import br.com.koradi.model.product.Product;
 import br.com.koradi.repository.*;
 import br.com.koradi.service.AddressService;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +26,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 
 @SpringBootApplication
+@EnableRabbit
 public class MainApplication {
 
   public static void main(String[] args) {
@@ -70,7 +72,8 @@ public class MainApplication {
       orderProductRepository.save(orderProduct);
 
       Address address =
-          ofNullable(modelMapper.map(addressService.findByZipCode("12236896"), Address.class)).get();
+          ofNullable(modelMapper.map(addressService.findByZipCode("12236896"), Address.class))
+              .get();
       address.setNumber("123");
       addressRepository.save(address);
 

@@ -19,6 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Accessors(chain = true)
+@ToString
 @Entity
 @Table(name = "customer")
 public class Customer implements Serializable {
