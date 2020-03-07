@@ -6,6 +6,7 @@ import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.dto.response.Response;
 import br.com.koradi.service.CustomerService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,7 @@ public class CustomerController {
    * @param customerRequest {@link CustomerRequest}
    * @return {@link Response}
    */
+  @ApiOperation(value = "Creates new customer", response = Response.class)
   @PostMapping
   public Response create(@RequestBody @Valid CustomerRequest customerRequest) {
     return Response.ok().setPayload(customerService.create(of(customerRequest)));
@@ -49,6 +51,7 @@ public class CustomerController {
    * @param customerRequest {@link CustomerRequest}
    * @return {@link Response}
    */
+  @ApiOperation(value = "Updates new customer", response = Response.class)
   @PutMapping
   public Response update(@RequestBody @Valid CustomerRequest customerRequest) {
     return Response.ok().setPayload(customerService.update(of(customerRequest)));
@@ -61,6 +64,7 @@ public class CustomerController {
    * @param assembler {@link PagedResourcesAssembler} assembler
    * @return {@link Response} all customers
    */
+  @ApiOperation(value = "Finds all customers", response = Response.class)
   @GetMapping
   public PagedResources<Resource<CustomerDto>> findAll(
       Pageable page, PagedResourcesAssembler<CustomerDto> assembler) {
@@ -73,6 +77,7 @@ public class CustomerController {
    * @param id Id
    * @return {@link Response} address
    */
+  @ApiOperation(value = "Finds customer's address by id", response = Response.class)
   @GetMapping("/address")
   public Response address(@RequestParam String id) {
     return Response.ok()

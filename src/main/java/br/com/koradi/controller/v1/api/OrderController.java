@@ -5,6 +5,7 @@ import br.com.koradi.dto.mapper.OrderMapper;
 import br.com.koradi.dto.response.Response;
 import br.com.koradi.service.OrderService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class OrderController {
    * @param orderRequest {@link OrderRequest}
    * @return {@link Response}
    */
+  @ApiOperation(value = "Creates new order", response = Response.class)
   @PostMapping
   public Response create(@RequestBody @Valid OrderRequest orderRequest) {
     return Response.ok().setPayload(orderService.create(orderMapper.of(orderRequest)));
@@ -40,6 +42,7 @@ public class OrderController {
    * @param id Order id
    * @return
    */
+  @ApiOperation(value = "Gets order by id", response = Response.class)
   @GetMapping("{id}")
   public Response getOrder(@PathVariable String id) {
     return Response.ok().setPayload(orderService.findById(id));

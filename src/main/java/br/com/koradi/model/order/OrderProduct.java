@@ -7,6 +7,8 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.FetchType.LAZY;
+
 /**
  * OrderProduct Entity
  *
@@ -25,7 +27,9 @@ public class OrderProduct implements Serializable {
   @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
   private String id;
 
-  @ManyToOne private Order order;
+  @ManyToOne(optional = false, fetch = LAZY)
+  private Order order;
 
-  @ManyToOne private Product product;
+  @ManyToOne(optional = false, fetch = LAZY)
+  private Product product;
 }

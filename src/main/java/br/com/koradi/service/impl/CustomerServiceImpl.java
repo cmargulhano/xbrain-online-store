@@ -77,11 +77,12 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Page<CustomerDto> listAll(Pageable pageable) {
-    Page<Customer> objects = customerRepository.findAll(pageable);
-    return objects.map(this::convertToObjectDto);
+    Page<Customer> customers = customerRepository.findAll(pageable);
+    return customers.map(this::toCustomerDto);
   }
 
-  private CustomerDto convertToObjectDto(Customer customer) {
+  private CustomerDto toCustomerDto(Customer customer) {
+    customer.setOrders(null);
     return modelMapper.map(customer, CustomerDto.class);
   }
 }

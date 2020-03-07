@@ -15,6 +15,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static java.math.BigDecimal.valueOf;
 import static java.time.LocalDateTime.now;
 
@@ -85,6 +88,7 @@ public class OrderServiceImpl implements OrderService {
     orderModel.setPrice(valueOf(price)).setOrderDate(now());
     Order order = orderRepository.save(orderModel);
 
+    Set<OrderProduct> orderProducts = new HashSet<>();
     orderDto
         .getProducts()
         .forEach(
@@ -94,8 +98,9 @@ public class OrderServiceImpl implements OrderService {
                       .product(modelMapper.map(product, Product.class))
                       .order(order)
                       .build();
-              orderProductRepository.save(orderProduct);
+              orderProducts.add(orderProductRepository.save(orderProduct));
             });
-    return order;
+    order.setOrderProducts(orderProducts);
+    return orderRepository.save(order);
   }
 }
