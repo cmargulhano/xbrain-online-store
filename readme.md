@@ -1,6 +1,6 @@
 # VirtualStore
 
-##Para rodar o microservice há duas opções via Maven ou Docker:
+## Para rodar o microservice há duas opções via Maven ou Docker:
 
 
 ### Maven
@@ -20,7 +20,7 @@ mvn spring-boot:run
 docker-compose -f docker-compose.yml up -d
 ```
 
-##Excutar testes
+## Executar testes
 
 ```
 mvn test
