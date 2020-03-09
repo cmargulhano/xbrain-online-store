@@ -1,7 +1,12 @@
 package br.com.koradi.exception;
 
-/** @author Cláudio Margulhano */
+/**
+ * Entity types
+ *
+ * @author Cláudio Margulhano
+ */
 public enum EntityType {
   CUSTOMER,
-  PRODUCT
+  PRODUCT,
+  ADDRESS
 }

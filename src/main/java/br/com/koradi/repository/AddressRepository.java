@@ -2,6 +2,7 @@ package br.com.koradi.repository;
 
 import br.com.koradi.model.customer.Address;
 import br.com.koradi.model.customer.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -9,5 +10,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author Cláudio Margulhano
  */
-public interface AddressRepository extends PagingAndSortingRepository<Address, String> {
+public interface AddressRepository extends JpaRepository<Address, String> {
 }

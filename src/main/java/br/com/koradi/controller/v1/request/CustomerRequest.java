@@ -23,4 +23,5 @@ public class CustomerRequest {
   private GenderType gender;
   private String phoneNumber;
   private String mobileNumber;
+  private String zipCode;
 }

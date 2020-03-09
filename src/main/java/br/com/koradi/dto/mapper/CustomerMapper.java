@@ -57,6 +57,7 @@ public class CustomerMapper {
         .setGender(customer.getGender())
         .setPhoneNumber(customer.getPhoneNumber())
         .setPhoneNumber(customer.getPhoneNumber())
-        .setMobileNumber(customer.getMobileNumber());
+        .setMobileNumber(customer.getMobileNumber())
+        .setZipCode(customer.getZipCode());
   }
 }

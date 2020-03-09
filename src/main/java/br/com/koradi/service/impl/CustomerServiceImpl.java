@@ -3,6 +3,7 @@ package br.com.koradi.service.impl;
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.model.customer.Address;
 import br.com.koradi.model.customer.Customer;
+import br.com.koradi.repository.AddressRepository;
 import br.com.koradi.repository.CustomerRepository;
 import br.com.koradi.service.AddressService;
 import br.com.koradi.service.CustomerService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import static br.com.koradi.exception.EnterpriseException.throwException;
+import static br.com.koradi.exception.EntityType.ADDRESS;
 import static br.com.koradi.exception.EntityType.CUSTOMER;
 import static br.com.koradi.exception.ExceptionType.DUPLICATE_ENTITY;
 import static br.com.koradi.exception.ExceptionType.ENTITY_NOT_FOUND;
@@ -30,6 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Autowired private CustomerRepository customerRepository;
 
+  @Autowired private AddressRepository addressRepository;
+
   @Autowired private ModelMapper modelMapper;
 
   @Autowired private AddressService addressService;
@@ -44,6 +48,11 @@ public class CustomerServiceImpl implements CustomerService {
           ofNullable(
               modelMapper.map(
                   addressService.findByZipCode(customerDto.getZipCode()), Address.class));
+      if (!address.isPresent()) {
+        throw throwException(ADDRESS, ENTITY_NOT_FOUND, customerDto.getEmail());
+      }
+      addressRepository.saveAndFlush(address.get());
+
       Customer customerModel = customer.get();
       customerModel.setAddress(address.get());
       return modelMapper.map(customerRepository.save(customerModel), CustomerDto.class);

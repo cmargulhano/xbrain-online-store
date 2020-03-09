@@ -51,7 +51,7 @@ public class CustomerController {
    * @param customerRequest {@link CustomerRequest}
    * @return {@link Response}
    */
-  @ApiOperation(value = "Updates new customer", response = Response.class)
+  @ApiOperation(value = "Updates customer", response = Response.class)
   @PutMapping
   public Response update(@RequestBody @Valid CustomerRequest customerRequest) {
     return Response.ok().setPayload(customerService.update(of(customerRequest)));
