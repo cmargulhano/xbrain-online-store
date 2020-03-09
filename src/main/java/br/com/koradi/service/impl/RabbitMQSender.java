@@ -27,9 +27,9 @@ public class RabbitMQSender {
   /**
    * Sends order
    *
-   * @param id order id
+   * @param orderId order id
    */
-  public void send(String id) {
-    rabbitTemplate.convertAndSend(exchange, routingkey, orderService.findById(id));
+  public void send(String orderId) {
+    rabbitTemplate.convertAndSend(exchange, routingkey, orderService.findById(orderId));
   }
 }

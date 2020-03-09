@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Address service default implementation
@@ -28,7 +29,7 @@ public class AddressServiceImpl implements AddressService {
   @Override
   public AddressDto findByZipCode(String zipCode) {
     String uri = format(HTTPS_VIACEP_COM_BR_WS_S_JSON, zipCode);
-    ResponseEntity<AddressDto> result = restTemplate.getForEntity(uri, AddressDto.class);
-    return result.getBody();
+    ResponseEntity<AddressDto> addressDto = restTemplate.getForEntity(uri, AddressDto.class);
+    return requireNonNull(addressDto.getBody()).setZipCode(zipCode);
   }
 }

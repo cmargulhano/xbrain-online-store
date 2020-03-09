@@ -37,5 +37,5 @@ public class Customer implements Serializable {
   private String phoneNumber;
   private String mobileNumber;
   @OneToOne private Address address;
-  @OneToMany private Set<Order> orders;
+  @ManyToMany private Set<Order> orders;
 }

@@ -1,6 +1,6 @@
 # VirtualStore
 
-Para rodar há duas opções via Maven ou Docker:
+##Para rodar o microservice há duas opções via Maven ou Docker:
 
 
 ### Maven
@@ -20,10 +20,16 @@ mvn spring-boot:run
 docker-compose -f docker-compose.yml up -d
 ```
 
-### Swagger
+##Excutar testes
+
+```
+mvn test
+```
+
+## Swagger
 
 http://localhost:8080/swagger-ui.html
 
-### HAL Browser
+## HAL Browser
 
 http://localhost:8080/browser/index.html#/

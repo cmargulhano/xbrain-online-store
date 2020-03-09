@@ -5,8 +5,12 @@ import br.com.koradi.model.customer.Customer;
 import br.com.koradi.model.order.Order;
 import br.com.koradi.model.order.OrderProduct;
 import br.com.koradi.model.product.Product;
-import br.com.koradi.repository.*;
+import br.com.koradi.repository.AddressRepository;
+import br.com.koradi.repository.CustomerRepository;
+import br.com.koradi.repository.OrderRepository;
+import br.com.koradi.repository.ProductRepository;
 import br.com.koradi.service.AddressService;
+import br.com.koradi.service.impl.RabbitMQSender;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.CommandLineRunner;
@@ -42,10 +46,10 @@ public class MainApplication {
   CommandLineRunner init(
       ProductRepository productRepository,
       OrderRepository orderRepository,
-      OrderProductRepository orderProductRepository,
       CustomerRepository customerRepository,
       AddressRepository addressRepository,
       AddressService addressService,
+      RabbitMQSender rabbitMQSender,
       ModelMapper modelMapper) {
     return args -> {
 
@@ -74,7 +78,9 @@ public class MainApplication {
 
       OrderProduct orderProduct =
           OrderProduct.builder().product(products.get(0)).order(order).build();
-      orderProductRepository.save(orderProduct);
+
+      order.setOrderProducts(new HashSet<>(singletonList(orderProduct)));
+      order = orderRepository.save(order);
 
       Address address =
           ofNullable(modelMapper.map(addressService.findByZipCode("12236896"), Address.class))
@@ -95,6 +101,8 @@ public class MainApplication {
       customerRepository.save(customer);
       order.setCustomer(customer);
       orderRepository.save(order);
+
+      rabbitMQSender.send(order.getId());
     };
   }
 }
