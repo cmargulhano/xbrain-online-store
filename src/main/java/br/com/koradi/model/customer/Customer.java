@@ -1,6 +1,5 @@
 package br.com.koradi.model.customer;
 
-import br.com.koradi.model.order.Order;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,7 +7,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * Customer Entity

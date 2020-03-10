@@ -2,14 +2,10 @@ package br.com.koradi.dto.mapper;
 
 import br.com.koradi.controller.v1.request.CustomerRequest;
 import br.com.koradi.dto.model.CustomerDto;
-import br.com.koradi.dto.model.OrderDto;
 import br.com.koradi.model.customer.Customer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.stream.Collectors;
 
 /**
  * Customer Mapper
@@ -60,6 +56,13 @@ public class CustomerMapper {
         .setAddressNumber(customer.getAddressNumber());
   }
 
+  /**
+   * Merge {@link Customer} and {@link CustomerDto}
+   *
+   * @param customer {@link Customer}
+   * @param customerDto {@link CustomerDto}
+   * @return {@link Customer}
+   */
   public Customer of(Customer customer, CustomerDto customerDto) {
     if (customerDto.getBirthDate() != null) {
       customer.setBirthDate(customerDto.getBirthDate());
