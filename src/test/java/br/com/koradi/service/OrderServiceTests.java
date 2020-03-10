@@ -5,7 +5,6 @@ import br.com.koradi.dto.model.OrderDto;
 import br.com.koradi.dto.model.ProductDto;
 import br.com.koradi.model.customer.Customer;
 import br.com.koradi.model.product.Product;
-import br.com.koradi.repository.AddressRepository;
 import br.com.koradi.repository.CustomerRepository;
 import br.com.koradi.repository.ProductRepository;
 import org.junit.Before;
@@ -28,9 +27,7 @@ public class OrderServiceTests {
   @Autowired private CustomerService customerService;
   @Autowired private CustomerRepository customerRepository;
   @Autowired private ModelMapper mapper;
-  @Autowired private AddressService addressService;
   @Autowired private ProductRepository productRepository;
-  @Autowired private AddressRepository addressRepository;
   @Autowired private OrderService orderService;
   private Customer customer;
 
@@ -43,17 +40,24 @@ public class OrderServiceTests {
   public void createOrder() {
     CustomerDto customerDto = customerService.findCustomerById(customer.getId());
     assertThat(customerDto).isNotNull();
-    Page<Product> products = productRepository.findAll(of(0, 10));
 
+    Page<Product> products = productRepository.findAll(of(0, 10));
     OrderDto orderDto =
         new OrderDto()
             .setCustomerId(customer.getId())
             .setProducts(new HashSet<>(products.map(this::toProductDto).getContent()));
 
+    double price =
+        orderDto.getProducts().stream()
+            .mapToDouble(product -> product.getPrice().doubleValue())
+            .sum();
+
     assertThat(orderDto).isNotNull();
 
     OrderDto orderCreated = orderService.create(orderDto);
     assertThat(orderCreated).isNotNull();
+
+    assertThat(orderCreated.getPrice().doubleValue()).isEqualTo(price);
   }
 
   private ProductDto toProductDto(Product product) {

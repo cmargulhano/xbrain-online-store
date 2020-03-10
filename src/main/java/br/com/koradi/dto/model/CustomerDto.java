@@ -48,5 +48,4 @@ public class CustomerDto {
   private String zipCode;
   private String addressNumber;
   private AddressDto address;
-  private Set<OrderDto> orders;
 }

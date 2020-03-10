@@ -52,7 +52,6 @@ public class OrderServiceImpl implements OrderService {
     Order order = orderRepository.findById(id).get();
     OrderDto orderDto = modelMapper.map(order, OrderDto.class);
     CustomerDto customer = customerService.findCustomerById(order.getCustomer().getId());
-    customer.setOrders(null);
     orderDto.setCustomer(customer);
     orderProductRepository
         .findAllByOrderId(id)

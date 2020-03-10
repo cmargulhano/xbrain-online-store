@@ -2,10 +2,9 @@ package br.com.koradi.service;
 
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.model.customer.Customer;
-import br.com.koradi.repository.*;
+import br.com.koradi.repository.CustomerRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -19,12 +18,6 @@ import static org.springframework.data.domain.PageRequest.of;
 public class CustomerServiceTests {
   @Autowired private CustomerService customerService;
   @Autowired private CustomerRepository customerRepository;
-  @Autowired private ModelMapper mapper;
-  @Autowired private AddressService addressService;
-  @Autowired private ProductRepository productRepository;
-  @Autowired private OrderRepository orderRepository;
-  @Autowired private OrderProductRepository orderProductRepository;
-  @Autowired private AddressRepository addressRepository;
 
   @Test
   public void findCustomer() {
@@ -37,6 +30,6 @@ public class CustomerServiceTests {
     Page<CustomerDto> page = customerService.listAll(of(0, 10));
     assertThat(page).isNotNull();
     assertThat(page.getContent()).isNotNull();
-    assertThat(page.getContent().size()).isEqualTo(1);
+    assertThat(page.getContent().size()).isGreaterThan(0);
   }
 }
