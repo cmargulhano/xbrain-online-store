@@ -83,9 +83,9 @@ public class MainApplication {
       order = orderRepository.save(order);
 
       Address address =
-          ofNullable(modelMapper.map(addressService.findByZipCode("12236896"), Address.class))
+          ofNullable(
+                  modelMapper.map(addressService.findByZipCode("12236896", "126"), Address.class))
               .get();
-      address.setNumber("126");
       addressRepository.save(address);
 
       Customer customer =
@@ -96,8 +96,7 @@ public class MainApplication {
               .setGender(MALE)
               .setPhoneNumber("(12)99667-3166")
               .setMobileNumber("(12)99667-3166")
-              .setAddress(address)
-              .setOrders(new HashSet<>(singletonList(order)));
+              .setAddress(address);
       customerRepository.save(customer);
       order.setCustomer(customer);
       orderRepository.save(order);

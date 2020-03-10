@@ -5,6 +5,7 @@ import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.dto.model.OrderDto;
 import br.com.koradi.model.customer.Customer;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -18,29 +19,25 @@ import java.util.stream.Collectors;
 @Component
 public class CustomerMapper {
 
+  @Autowired private ModelMapper mapper;
+
   /**
    * Maps {@link Customer} to {@link CustomerDto}
    *
    * @param customer {@link Customer}
    * @return {@link CustomerDto}
    */
-  public static CustomerDto of(Customer customer) {
-    CustomerDto user =
+  public CustomerDto of(Customer customer) {
+    CustomerDto customerDto =
         new CustomerDto()
+            .setId(customer.getId())
             .setFullName(customer.getFullName())
             .setEmail(customer.getEmail())
             .setBirthDate(customer.getBirthDate())
             .setGender(customer.getGender())
             .setPhoneNumber(customer.getPhoneNumber())
             .setMobileNumber(customer.getMobileNumber());
-    if (customer.getOrders() != null && customer.getOrders().size() > 0) {
-      user.setOrders(
-          new HashSet<OrderDto>(
-              customer.getOrders().stream()
-                  .map(role -> new ModelMapper().map(role, OrderDto.class))
-                  .collect(Collectors.toSet())));
-    }
-    return user;
+    return customerDto;
   }
 
   /**
@@ -49,8 +46,9 @@ public class CustomerMapper {
    * @param customer {@link CustomerRequest}
    * @return {@link CustomerDto}
    */
-  public static CustomerDto of(CustomerRequest customer) {
+  public CustomerDto of(CustomerRequest customer) {
     return new CustomerDto()
+        .setId(customer.getId())
         .setFullName(customer.getFullName())
         .setEmail(customer.getEmail())
         .setBirthDate(customer.getBirthDate())
@@ -58,6 +56,26 @@ public class CustomerMapper {
         .setPhoneNumber(customer.getPhoneNumber())
         .setPhoneNumber(customer.getPhoneNumber())
         .setMobileNumber(customer.getMobileNumber())
-        .setZipCode(customer.getZipCode());
+        .setZipCode(customer.getZipCode())
+        .setAddressNumber(customer.getAddressNumber());
+  }
+
+  public Customer of(Customer customer, CustomerDto customerDto) {
+    if (customerDto.getBirthDate() != null) {
+      customer.setBirthDate(customerDto.getBirthDate());
+    }
+    if (customerDto.getFullName() != null && !"".equals(customerDto.getFullName())) {
+      customer.setFullName(customerDto.getFullName());
+    }
+    if (customerDto.getGender() != null) {
+      customer.setGender(customerDto.getGender());
+    }
+    if (customerDto.getPhoneNumber() != null && !"".equals(customerDto.getPhoneNumber())) {
+      customer.setPhoneNumber(customerDto.getPhoneNumber());
+    }
+    if (customerDto.getMobileNumber() != null && !"".equals(customerDto.getMobileNumber())) {
+      customer.setMobileNumber(customerDto.getMobileNumber());
+    }
+    return customer;
   }
 }

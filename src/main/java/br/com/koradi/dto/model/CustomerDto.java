@@ -46,6 +46,7 @@ public class CustomerDto {
   private String mobileNumber;
   private String email;
   private String zipCode;
+  private String addressNumber;
   private AddressDto address;
   private Set<OrderDto> orders;
 }

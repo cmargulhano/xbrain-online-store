@@ -1,5 +1,6 @@
 package br.com.koradi.service.impl;
 
+import br.com.koradi.dto.mapper.CustomerMapper;
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.model.customer.Address;
 import br.com.koradi.model.customer.Customer;
@@ -34,27 +35,18 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Autowired private AddressRepository addressRepository;
 
+  @Autowired private AddressService addressService;
+
   @Autowired private ModelMapper modelMapper;
 
-  @Autowired private AddressService addressService;
+  @Autowired private CustomerMapper customerMapper;
 
   @Override
   public CustomerDto create(CustomerDto customerDto) {
     Optional<Customer> customer =
         ofNullable(customerRepository.findByEmail(customerDto.getEmail()));
     if (!customer.isPresent()) {
-      customer = ofNullable(modelMapper.map(customerDto, Customer.class));
-      Optional<Address> address =
-          ofNullable(
-              modelMapper.map(
-                  addressService.findByZipCode(customerDto.getZipCode()), Address.class));
-      if (!address.isPresent()) {
-        throw throwException(ADDRESS, ENTITY_NOT_FOUND, customerDto.getEmail());
-      }
-      addressRepository.saveAndFlush(address.get());
-
-      Customer customerModel = customer.get();
-      customerModel.setAddress(address.get());
+      Customer customerModel = modelMapper.map(customerDto, Customer.class);
       return modelMapper.map(customerRepository.save(customerModel), CustomerDto.class);
     }
     throw throwException(CUSTOMER, DUPLICATE_ENTITY, customerDto.getEmail());
@@ -73,13 +65,11 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public CustomerDto update(CustomerDto customerDto) {
     Optional<Customer> customer =
-        Optional.ofNullable(customerRepository.findByEmail(customerDto.getEmail()));
+        ofNullable(customerRepository.findByEmail(customerDto.getEmail()));
     if (customer.isPresent()) {
-      final String id = customer.get().getId();
-      customer = ofNullable(modelMapper.map(customerDto, Customer.class));
-      Customer customerModel = customer.get();
-      customerModel.setId(id);
-      return modelMapper.map(customerRepository.save(customer.get()), CustomerDto.class);
+      Customer customerModel = customerMapper.of(customer.get(), customerDto);
+      customerModel.setAddress(saveAddress(customerDto).get());
+      return modelMapper.map(customerRepository.save(customerModel), CustomerDto.class);
     }
     throw throwException(CUSTOMER, ENTITY_NOT_FOUND, customerDto.getFullName());
   }
@@ -90,8 +80,52 @@ public class CustomerServiceImpl implements CustomerService {
     return customers.map(this::toCustomerDto);
   }
 
+  /**
+   * Maps {@link Customer} to {@link CustomerDto}
+   *
+   * @param customer {@link Customer}
+   * @return {@link CustomerDto}
+   */
   private CustomerDto toCustomerDto(Customer customer) {
-    customer.setOrders(null);
-    return modelMapper.map(customer, CustomerDto.class);
+    return customerMapper.of(customer);
+  }
+
+  /**
+   * Saves address
+   *
+   * @param customerDto {@link CustomerDto} customer
+   * @return {@link Address} address
+   */
+  private Optional<Address> saveAddress(CustomerDto customerDto) {
+    Optional<Address> address =
+        ofNullable(
+            modelMapper
+                .map(
+                    addressService.findByZipCode(
+                        customerDto.getZipCode(), customerDto.getAddressNumber()),
+                    Address.class)
+                .setId(getAddressId(customerDto)));
+    if (!address.isPresent() || address.get().getLocality() == null) {
+      throw throwException(ADDRESS, ENTITY_NOT_FOUND, customerDto.getZipCode());
+    }
+    addressRepository.saveAndFlush(address.get());
+    return address;
+  }
+
+  /**
+   * Gets address' id
+   *
+   * @param customerDto {@link CustomerDto}
+   * @return Address' id
+   */
+  private String getAddressId(CustomerDto customerDto) {
+    String id = null;
+    if (customerDto.getEmail() != null) {
+      Customer customer = customerRepository.findByEmail(customerDto.getEmail());
+      if (customer != null && customer.getAddress() != null) {
+        id = customer.getAddress().getId();
+      }
+    }
+    return id;
   }
 }

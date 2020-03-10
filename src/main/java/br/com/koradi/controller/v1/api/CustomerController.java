@@ -1,6 +1,7 @@
 package br.com.koradi.controller.v1.api;
 
 import br.com.koradi.controller.v1.request.CustomerRequest;
+import br.com.koradi.dto.mapper.CustomerMapper;
 import br.com.koradi.dto.model.AddressDto;
 import br.com.koradi.dto.model.CustomerDto;
 import br.com.koradi.dto.response.Response;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static br.com.koradi.dto.mapper.CustomerMapper.of;
-
 /**
  * Customer controller
  *
@@ -32,6 +31,7 @@ import static br.com.koradi.dto.mapper.CustomerMapper.of;
 public class CustomerController {
   @Autowired private CustomerService customerService;
   @Autowired private ModelMapper modelMapper;
+  @Autowired private CustomerMapper customerMapper;
 
   /**
    * Creates new customer
@@ -42,7 +42,7 @@ public class CustomerController {
   @ApiOperation(value = "Creates new customer", response = Response.class)
   @PostMapping
   public Response create(@RequestBody @Valid CustomerRequest customerRequest) {
-    return Response.ok().setPayload(customerService.create(of(customerRequest)));
+    return Response.ok().setPayload(customerService.create(customerMapper.of(customerRequest)));
   }
 
   /**
@@ -54,7 +54,7 @@ public class CustomerController {
   @ApiOperation(value = "Updates customer", response = Response.class)
   @PutMapping
   public Response update(@RequestBody @Valid CustomerRequest customerRequest) {
-    return Response.ok().setPayload(customerService.update(of(customerRequest)));
+    return Response.ok().setPayload(customerService.update(customerMapper.of(customerRequest)));
   }
 
   /**
