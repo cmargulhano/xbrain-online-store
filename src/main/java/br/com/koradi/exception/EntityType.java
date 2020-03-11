@@ -8,5 +8,6 @@ package br.com.koradi.exception;
 public enum EntityType {
   CUSTOMER,
   PRODUCT,
-  ADDRESS
+  ADDRESS,
+  ORDER
 }

@@ -17,6 +17,10 @@ mvn spring-boot:run
 ### Docker
 
 ```
+mvn clean install
+
+docker-compose build
+
 docker-compose -f docker-compose.yml up -d
 ```
 

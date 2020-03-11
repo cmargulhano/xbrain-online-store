@@ -11,7 +11,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Address service default implementation

@@ -16,8 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import static br.com.koradi.exception.EnterpriseException.throwException;
+import static br.com.koradi.exception.EntityType.ORDER;
+import static br.com.koradi.exception.ExceptionType.ENTITY_NOT_FOUND;
 import static java.math.BigDecimal.valueOf;
 import static java.time.LocalDateTime.now;
 
@@ -49,7 +53,11 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public OrderDto findById(String id) {
-    Order order = orderRepository.findById(id).get();
+    Optional<Order> orderDb = orderRepository.findById(id);
+    if (!orderDb.isPresent()) {
+      throw throwException(ORDER, ENTITY_NOT_FOUND, id);
+    }
+    Order order = orderDb.get();
     OrderDto orderDto = modelMapper.map(order, OrderDto.class);
     CustomerDto customer = customerService.findCustomerById(order.getCustomer().getId());
     orderDto.setCustomer(customer);

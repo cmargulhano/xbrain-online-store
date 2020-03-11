@@ -40,7 +40,7 @@ public class OrderController {
    * Gets order
    *
    * @param id Order id
-   * @return
+   * @return {@link Response}
    */
   @ApiOperation(value = "Gets order by id", response = Response.class)
   @GetMapping("{id}")

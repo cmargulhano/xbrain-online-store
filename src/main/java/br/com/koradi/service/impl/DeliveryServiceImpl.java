@@ -8,6 +8,8 @@ import br.com.koradi.repository.DeliveryRepository;
 import br.com.koradi.service.DeliveryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,5 +27,15 @@ public class DeliveryServiceImpl implements DeliveryService {
   public DeliveryDto create(OrderDto orderDto) {
     Delivery delivery = deliveryMapper.of(orderDto);
     return modelMapper.map(deliveryRepository.save(delivery), DeliveryDto.class);
+  }
+
+  @Override
+  public Page<DeliveryDto> listAll(Pageable pageable) {
+    Page<Delivery> customers = deliveryRepository.findAll(pageable);
+    return customers.map(this::toDeliveryDto);
+  }
+
+  private DeliveryDto toDeliveryDto(Delivery delivery) {
+    return deliveryMapper.of(delivery);
   }
 }

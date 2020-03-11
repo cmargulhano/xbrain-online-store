@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 /**
@@ -30,6 +31,6 @@ public class OrderProduct implements Serializable {
   @ManyToOne(optional = false, fetch = LAZY)
   private Order order;
 
-  @ManyToOne(optional = false, fetch = LAZY)
+  @ManyToOne(optional = false, fetch = EAGER)
   private Product product;
 }
